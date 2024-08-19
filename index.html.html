@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Скачать видео бесплатно</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #f4e3c3, #e3cba3);
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        .container {
+            width: 80%;
+            max-width: 500px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        p {
+            background-color: #b22222;
+            color: #f0f0f0;
+            padding: 10px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            font-size: 18px;
+            background-color: #444;
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #333;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Скачать видео бесплатно</h1>
+        <p>YouTube, Instagram, TikTok</p>
+        <input type="text" id="videoUrl" placeholder="Вставьте ссылку на видео" required>
+        <select id="platform">
+            <option value="">Выберите платформу</option>
+            <option value="youtube">YouTube</option>
+            <option value="instagram">Instagram</option>
+            <option value="tiktok">TikTok</option>
+        </select>
+        <button onclick="generateDownloadLink()">Сгенерировать ссылку</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        async function generateDownloadLink() {
+            const url = document.getElementById('videoUrl').value;
+            const platform = document.getElementById('platform').value;
+            const resultDiv = document.getElementById('result');
+
+            if (!url || !platform) {
+                resultDiv.innerHTML = 'Пожалуйста, заполните все поля.';
+                return;
+            }
+
+            resultDiv.innerHTML = 'Генерация ссылки...';
+
+            // Имитация отправки данных на сервер для обработки
+            try {
+                const response = await fetch('https://your-server-url.com/api/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ url, platform })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    if (data.fileSize > 300) {
+                        resultDiv.innerHTML = 'Ошибка: размер видео превышает 300 MB.';
+                    } else {
+                        const downloadLink = data.telegramLink; // Ссылка на скачивание через Telegram
+                        resultDiv.innerHTML = `Ссылка на скачивание: <a href="${downloadLink}" target="_blank">${downloadLink}</a>`;
+                    }
+                } else {
+                    resultDiv.innerHTML = 'Ошибка при обработке видео.';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = 'Ошибка соединения с сервером.';
+            }
+        }
+    </script>
+</body>
+</html>
